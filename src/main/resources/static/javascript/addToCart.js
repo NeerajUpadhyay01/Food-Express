@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						
 			            if (orderResponse.id) {
 			                const razorpayOptions = {
-			                    key: 'rzp_test_s2VG2G2HwcOQd6',
+			                    key: 'rzp_test_2VVEO0JYqHmseQ',
 			                    amount: orderResponse.amount,
 			                    currency: 'INR',
 			                    order_id: orderResponse.id,
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			                    prefill: {
 			                        name: localStorage.getItem('usernameCustomer'),
 			                        email: localStorage.getItem('emailCustomer'),
-			                        contact: '9898442387'
+			                        contact: '8890060178'
 			                    },
 			                    theme: {
 			                        color: '#5bb450'

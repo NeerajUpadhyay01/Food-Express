@@ -25,16 +25,14 @@ import com.razorpay.RazorpayException;
 @RestController
 public class OrderController {
 
-	
     @Autowired
     OrderService orderService;
 
     @Autowired
     AppliedCouponService appliedCouponService;
-    
+
     @Autowired
     EmailService emailService;
-    
 
     @GetMapping("get-orders/{userId}")
     public List<Order> getOrders(@PathVariable("userId") int userId) {
@@ -55,10 +53,10 @@ public class OrderController {
             String specialRequest = (String) item.get("specialRequest");
             itemRequestMap.put(itemId, specialRequest);
         }
-        
+
         if (paymentFlag == 1) {
             try {
-                RazorpayClient client = new RazorpayClient("rzp_test_s2VG2G2HwcOQd6", "13wTYUM144Kv98GujKu6kkB6");
+                RazorpayClient client = new RazorpayClient("rzp_test_2VVEO0JYqHmseQ", "1f9IU7uhTI5L3twUZSjZeqWk");
 
                 JSONObject options = new JSONObject();
                 options.put("amount", Math.round(finalAmount * 100));
@@ -69,9 +67,10 @@ public class OrderController {
 
                 Order orderPlaced = orderService.placeOrder(userId, paymentFlag, finalAmount, itemRequestMap);
                 if (orderPlaced != null) {
-                	String customerEmail = orderService.getCustomer(userId).getEmail();
-                	emailService.sendSimpleEmail(customerEmail, "Payment Success and Order Confirmation", "Dear Customer Your Order with ORDER ID " + orderPlaced.getOrderId()+ " has been Placed.");
-                    return ResponseEntity.ok(razorpayOrder.toString());  // Return Razorpay order details
+                    String customerEmail = orderService.getCustomer(userId).getEmail();
+                    emailService.sendSimpleEmail(customerEmail, "Payment Success and Order Confirmation",
+                            "Dear Customer Your Order with ORDER ID " + orderPlaced.getOrderId() + " has been Placed.");
+                    return ResponseEntity.ok(razorpayOrder.toString()); // Return Razorpay order details
                 } else {
                     return ResponseEntity.status(500).body("{\"error\": \"Failed to place order\"}");
                 }
@@ -81,18 +80,19 @@ public class OrderController {
         }
 
         else {
-        	Order orderPlaced = orderService.placeOrder(userId, paymentFlag, finalAmount, itemRequestMap);
-        	if (orderPlaced != null) {
-        		String customerEmail = orderService.getCustomer(userId).getEmail();
-            	emailService.sendSimpleEmail(customerEmail, "Payment Success and Order Confirmation", "Dear Customer Your Order with ORDER ID " + orderPlaced.getOrderId()+ " has been Placed.");
+            Order orderPlaced = orderService.placeOrder(userId, paymentFlag, finalAmount, itemRequestMap);
+            if (orderPlaced != null) {
+                String customerEmail = orderService.getCustomer(userId).getEmail();
+                emailService.sendSimpleEmail(customerEmail, "Payment Success and Order Confirmation",
+                        "Dear Customer Your Order with ORDER ID " + orderPlaced.getOrderId() + " has been Placed.");
                 return ResponseEntity.ok("cod");
             } else {
                 return ResponseEntity.status(500).body("Failed to place order");
             }
-		}
+        }
 
     }
-    
+
     @PostMapping("/verify-payment")
     public ResponseEntity<String> verifyPaymentHandler(@RequestBody Map<String, Object> paymentDetails) {
         try {
@@ -125,17 +125,16 @@ public class OrderController {
     // Helper function to calculate HMAC SHA256
     private String HmacSHA256(String data, String secret) throws Exception {
         javax.crypto.Mac mac = javax.crypto.Mac.getInstance("HmacSHA256");
-        javax.crypto.spec.SecretKeySpec secretKeySpec = new javax.crypto.spec.SecretKeySpec(secret.getBytes(), "HmacSHA256");
+        javax.crypto.spec.SecretKeySpec secretKeySpec = new javax.crypto.spec.SecretKeySpec(secret.getBytes(),
+                "HmacSHA256");
         mac.init(secretKeySpec);
         byte[] hashBytes = mac.doFinal(data.getBytes());
         return new String(org.apache.commons.codec.binary.Hex.encodeHex(hashBytes));
     }
-    
+
     @GetMapping("get-delivery-status/{orderId}")
-    public List<DeliveryPartner> getDeliveryStatusHandler(@PathVariable("orderId") Integer orderId)
-    {
-    	return orderService.getDeliveryStatus(orderId);
+    public List<DeliveryPartner> getDeliveryStatusHandler(@PathVariable("orderId") Integer orderId) {
+        return orderService.getDeliveryStatus(orderId);
     }
-    
 
 }
