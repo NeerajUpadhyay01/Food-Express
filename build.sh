@@ -1,28 +1,17 @@
 #!/usr/bin/env bash
 set -o errexit
 
-echo "🔧 Installing JDK 19..."
+echo "📦 Using pre-installed Java 17..."
 
-sudo apt-get update
-sudo apt-get install -y wget gnupg software-properties-common
-
-# Add Azul Zulu JDK repo (for JDK 19)
-wget -qO - https://repos.azul.com/azul-repo.key | sudo apt-key add -
-sudo apt-add-repository 'deb http://repos.azul.com/zulurepo stable main'
-
-# Install JDK 19
-sudo apt-get update
-sudo apt-get install -y zulu19-jdk
-
-# Set JAVA_HOME
-export JAVA_HOME=/usr/lib/jvm/zulu19
+# Set JAVA_HOME to Java 17 (preinstalled on Render)
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 export PATH=$JAVA_HOME/bin:$PATH
 
-echo "✅ Java version:"
 java -version
 
-echo "📦 Installing Maven..."
-sudo apt-get install -y maven
+echo "🚀 Installing Maven..."
+apt-get update
+apt-get install -y maven
 
-echo "🚀 Building your Spring Boot project..."
+echo "🏗️ Building the app..."
 mvn clean package -DskipTests
