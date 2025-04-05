@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
 set -o errexit
 
-echo "📦 Using pre-installed Java 17..."
+echo "📦 Installing SDKMAN (Java version manager)..."
 
-# Set JAVA_HOME to Java 17 (preinstalled on Render)
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH=$JAVA_HOME/bin:$PATH
+# Install SDKMAN
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
 
+# Install Java 17
+sdk install java 17.0.9-tem
+
+# Set JAVA_HOME automatically
+sdk use java 17.0.9-tem
 java -version
 
-echo "🚀 Installing Maven..."
-apt-get update
-apt-get install -y maven
+# Install Maven
+sdk install maven
+mvn -version
 
 echo "🏗️ Building the app..."
 mvn clean package -DskipTests
