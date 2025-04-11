@@ -56,7 +56,7 @@ public class OrderController {
 
         if (paymentFlag == 1) {
             try {
-                RazorpayClient client = new RazorpayClient("rzp_test_2VVEO0JYqHmseQ", "1f9IU7uhTI5L3twUZSjZeqWk");
+                RazorpayClient client = new RazorpayClient("rzp_test_kDE8Cmg37O8HYT", "gXqOFBMLEB58WCSgJAAfCmYK");
 
                 JSONObject options = new JSONObject();
                 options.put("amount", Math.round(finalAmount * 100));
